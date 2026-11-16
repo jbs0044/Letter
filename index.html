@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>For Cutie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#fdf6f4; --bg2:#f6f8f1; --bg3:#f3f2fa;
+    --paper:#fffefb; --ink:#3d3436; --soft:#8b7d80;
+    --rose:#d0647f; --rose-l:#f7d6de; --leaf:#7fa778; --gold:#c8a96a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Cormorant Garamond',Georgia,serif;color:var(--ink);min-height:100vh;overflow:hidden;
+    background:linear-gradient(160deg,var(--bg1) 0%,var(--bg2) 50%,var(--bg3) 100%);background-attachment:fixed}
+  body.reading{overflow-y:auto}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  .petal{position:fixed;top:-30px;z-index:0;pointer-events:none;animation:fall linear infinite}
+  @keyframes fall{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(50px,55vh) rotate(200deg)}100%{transform:translate(-20px,112vh) rotate(380deg)}}
+
+  /* ---------- Opening ---------- */
+  #intro{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;transition:opacity 1.2s}
+  #intro.off{opacity:0;pointer-events:none}
+  .env-wrap{position:relative;width:min(340px,84vw);aspect-ratio:7/5;cursor:pointer;perspective:900px;animation:float 5s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-7px)}}
+  .env-back{position:absolute;inset:0;border-radius:6px;background:#f6e7e4;box-shadow:0 26px 50px rgba(160,110,120,.22)}
+  .env-front{position:absolute;inset:0;z-index:3;border-radius:6px;
+    background:linear-gradient(to top right,#fbf1ee 50%,transparent 50.4%) left/50.2% 100% no-repeat,
+               linear-gradient(to top left,#f9ede9 50%,transparent 50.4%) right/50.2% 100% no-repeat}
+  .env-flap{position:absolute;left:0;right:0;top:0;height:58%;z-index:4;transform-origin:top;transition:transform .9s ease, z-index 0s .45s;
+    background:#f3dcd8;clip-path:polygon(0 0,100% 0,50% 100%)}
+  .env-wrap.open .env-flap{transform:rotateX(180deg);z-index:1}
+  .env-card{position:absolute;left:8%;right:8%;top:10%;bottom:8%;z-index:2;border-radius:3px;background:var(--paper);
+    display:flex;align-items:center;justify-content:center;font-family:'Great Vibes',cursive;font-size:32px;color:var(--rose);transition:transform 1s ease .6s}
+  .env-wrap.open .env-card{transform:translateY(-55%)}
+  .env-flower{position:absolute;left:50%;top:56%;z-index:6;width:96px;height:96px;transform:translate(-50%,-50%);transition:transform .7s,opacity .7s}
+  .env-wrap:hover .env-flower{transform:translate(-50%,-50%) scale(1.07) rotate(-6deg)}
+  .env-wrap.open .env-flower{transform:translate(-50%,-160%) scale(.7) rotate(-30deg);opacity:0}
+  .to{margin-top:40px;text-align:center}
+  .to .name{font-family:'Great Vibes',cursive;font-size:clamp(46px,10vw,62px);color:var(--rose);line-height:1}
+  .to .hint{color:var(--soft);font-style:italic;font-size:18px;margin-top:10px}
+
+  /* ---------- Letter ---------- */
+  #letter{position:relative;z-index:2;max-width:700px;margin:0 auto;padding:70px 16px 90px;display:none;opacity:0;transform:translateY(30px);transition:opacity 1.6s,transform 1.6s}
+  #letter.show{opacity:1;transform:none}
+  .sheet{position:relative;background:var(--paper);border-radius:4px;padding:120px 66px 120px;
+    box-shadow:0 2px 0 #f1e6e2,0 30px 70px rgba(150,110,120,.16);border:1px solid #f3e7e4}
+  .sheet::before{content:"";position:absolute;inset:14px;border:1px solid rgba(200,169,106,.35);border-radius:3px;pointer-events:none}
+  .wreath{position:absolute;left:50%;top:-58px;transform:translateX(-50%);width:min(420px,92%);pointer-events:none}
+  .corner{position:absolute;width:150px;pointer-events:none}
+  .corner.bl{left:-34px;bottom:-30px}
+  .corner.br{right:-34px;bottom:-30px;transform:scaleX(-1)}
+  .side{position:absolute;top:20%;width:46px;height:60%;pointer-events:none;opacity:.9}
+  .side.l{left:-24px}.side.r{right:-24px;transform:scaleX(-1)}
+
+  .date{text-align:right;color:var(--soft);font-style:italic;font-size:17px;margin-bottom:26px}
+  .greet{font-family:'Great Vibes',cursive;font-size:52px;color:var(--rose);margin-bottom:20px;line-height:1.1}
+  .sheet p{font-size:21.5px;line-height:1.85;margin-bottom:24px;text-align:justify;hyphens:auto;text-indent:2em}
+  .sheet p.first{text-indent:0}
+  .sheet p.first::first-letter{font-family:'Great Vibes',cursive;float:left;font-size:80px;line-height:.8;padding:10px 12px 0 0;color:var(--rose)}
+  .sheet em{color:var(--rose);font-style:italic}
+  .divider{display:flex;justify-content:center;margin:4px 0 28px}
+  .divider svg{width:160px;height:56px}
+  .closing{text-align:right;font-size:21.5px;line-height:1.8;margin-top:20px}
+  .closing .sig{font-family:'Great Vibes',cursive;font-size:46px;color:var(--rose);margin-top:10px;line-height:1.2}
+  .ps{font-style:italic;color:var(--soft);font-size:19px;margin-top:40px;text-indent:0!important;text-align:left!important}
+  .fade{opacity:0;transform:translateY(14px);transition:opacity 1.5s ease,transform 1.5s ease}
+  .fade.in{opacity:1;transform:none}
+  .again{display:block;margin:40px auto 0;color:var(--soft);font-style:italic;font-size:17px;text-decoration:underline;text-underline-offset:4px}
+
+  @media (max-width:560px){
+    #letter{padding-top:60px}
+    .sheet{padding:96px 24px 100px}
+    .sheet p{font-size:19px;text-align:left;text-indent:1.2em}
+    .greet{font-size:42px}.closing{font-size:19.5px}.closing .sig{font-size:40px}
+    .wreath{top:-44px}.corner{width:104px}.corner.bl{left:-14px;bottom:-20px}.corner.br{right:-14px;bottom:-20px}
+    .side{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+
+<!-- Opening -->
+<section id="intro">
+  <div class="env-wrap" id="env" onclick="openLetter()" role="button" aria-label="Open the letter">
+    <div class="env-back"></div>
+    <div class="env-card">for you</div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <svg class="env-flower" id="envFlower" viewBox="0 0 100 100"></svg>
+  </div>
+  <div class="to">
+    <div class="name">For Cutie</div>
+    <div class="hint">tap the flower to open</div>
+  </div>
+</section>
+
+<!-- Letter -->
+<main id="letter">
+  <article class="sheet">
+    <svg class="wreath" id="wreath" viewBox="0 0 420 140"></svg>
+    <svg class="side l" id="sideL" viewBox="0 0 46 400" preserveAspectRatio="none"></svg>
+    <svg class="side r" id="sideR" viewBox="0 0 46 400" preserveAspectRatio="none"></svg>
+    <svg class="corner bl" id="cornerBL" viewBox="0 0 150 150"></svg>
+    <svg class="corner br" id="cornerBR" viewBox="0 0 150 150"></svg>
+
+    <div class="date" id="date"></div>
+    <div class="greet">My dear Cutie,</div>
+
+    <p class="first fade">I have started this letter so many times. I wrote a line, crossed it out, and wrote it again. Because how do you put into words something that has lived quietly in your heart for so long? So tonight I stopped trying to make it perfect. I am simply going to write it the way I feel it — honestly, and from the deepest part of my heart.</p>
+
+    <p class="fade">Do you remember the first time I saw you? You probably don't. But I do. I remember it more clearly than most days of my life. I was so happy that day — the kind of happy that doesn't need a reason. And right in the middle of that happiness, a small, silly fear crept in: <em>what if she isn't Gujarati?</em> I smile at it now, but that day it truly worried me.</p>
+
+    <p class="fade">A few days later I found out that you <em>are</em> Gujarati — and inside, I was like, <em>"Oh my God!"</em> And when I came to know that we are both from the same city, I was honestly shocked. Out of all the people in this world, out of all the places we could have come from… the same city. I don't know if it meant anything. But to me, it felt like a small gift that life had quietly placed in my hands.</p>
+
+    <p class="fade">Can I tell you a little secret? Please don't be angry… <em>you walk like an aunty.</em> And your voice — it's a little like a <em>kau-kau lady</em>. But do you know what? I love it. I love every little thing about you, exactly the way it is. The things I tease you about are the very things I would miss the most.</p>
+
+    <p class="fade">And your hair… so beautiful, and so long. Some days I would just notice it and forget what I was about to say.</p>
+
+    <p class="fade">I tried so many times to win your heart, and I couldn't. Maybe in another life I will find you again, and try once more — and I hope that time, my side will be a little heavier.</p>
+
+    <div class="divider fade"><svg data-div="0" viewBox="0 0 160 56"></svg></div>
+
+    <p class="fade">But do you know what I admire about you the most? It is not only that you are beautiful. It is that you are so much more mature than me. I know I am a little childish. Life feels too heavy for me sometimes; there are days I can barely manage anything at all. And then I look at you — so young, carrying so much, and still meeting your work with a positive heart, every single day. I always wondered, <em>how does she do it?</em> You are brave. You are courageous. And I have never, not even once, seen you cry.</p>
+
+    <p class="fade">One day I had my own experience with some residents, and it hurt me. I went home feeling really bad. And that was the day I truly understood how hard it must be for you — because you go through it every day, and still you smile. That day, what I felt for you became something much deeper than just liking you. It became respect.</p>
+
+    <p class="fade">When some people found out that I like you, they started giving their opinions. They tried to change the way I see you; they wanted me to judge you. But I never did. Not once. Because what I saw in you was real, and no one's words could ever change that.</p>
+
+    <p class="fade">I want you to know this, truly — I have never put this much effort into anyone. Never. I did it only because it was you. Because I really, truly like you.</p>
+
+    <p class="fade">And still, I could never say any of this to your face. Every time I tried, the words got lost somewhere between my heart and my lips. So I am writing them here, where they can finally reach you.</p>
+
+    <div class="divider fade"><svg data-div="1" viewBox="0 0 160 56"></svg></div>
+
+    <p class="fade">But I understand. Maybe you don't feel the same. Maybe I should have simply asked you. Maybe you don't like me, or maybe there is a reason I will never know — and you don't owe me any explanation. Whatever it is, I respect it, completely. Your happiness matters more to me than my own wish.</p>
+
+    <p class="fade">I truly hope you become successful and achieve every single thing you have ever dreamed of. You deserve all of it — and so much more.</p>
+
+    <p class="fade">I accept my defeat — quietly, and with a full heart. And I am sorry. If I ever caused you any trouble, or hurt you in any way, even without knowing it… please forgive me. I won't trouble you anymore. I promise.</p>
+
+    <p class="fade">Please take care of yourself. Rest when you are tired, and don't carry everything alone. Keep smiling the way you do — the world is a little brighter because of it.</p>
+
+    <div class="closing fade">
+      Once again, I am sorry.<br>
+      With all my respect, and a piece of my heart<br>that will always wish you well,
+      <div class="sig">Yours, always a well-wisher</div>
+    </div>
+
+    <p class="ps fade">P.S. If possible… please keep this between us. 🤍</p>
+  </article>
+  <button class="again" onclick="scrollTo({top:0,behavior:'smooth'})">↑ read it again</button>
+</main>
+
+<script>
+/* ================= A little garden of different flowers ================= */
+const leaf=(x,y,rot,l=24,c='#8db585')=>`<path d="M${x} ${y} q${l*.5} ${-l*.32} ${l} 0 q${-l*.5} ${l*.32} ${-l} 0z" fill="${c}" transform="rotate(${rot} ${x} ${y})"/>`;
+const stem=(x1,y1,x2,y2,c='#8db585')=>`<path d="M${x1} ${y1} Q${(x1+x2)/2+6} ${(y1+y2)/2} ${x2} ${y2}" stroke="${c}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+
+function rose(x,y,r,c='#ef9fb2',d='#d0647f'){
+  return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>
+  <path d="M${x-r*.75} ${y+r*.1} a${r*.75} ${r*.75} 0 0 1 ${r*1.5} 0" stroke="${d}" stroke-width="1.4" fill="none" opacity=".7"/>
+  <path d="M${x+r*.5} ${y+r*.25} a${r*.5} ${r*.5} 0 0 1 ${-r} 0" stroke="${d}" stroke-width="1.3" fill="none" opacity=".7"/>
+  <path d="M${x-r*.28} ${y-r*.05} a${r*.28} ${r*.28} 0 0 1 ${r*.56} 0" stroke="${d}" stroke-width="1.2" fill="none" opacity=".8"/>
+  <circle cx="${x}" cy="${y-r*.02}" r="${r*.12}" fill="${d}" opacity=".7"/></g>`;
+}
+function tulip(x,y,s,c='#f6a38f',d='#e07f6a'){
+  return `<path d="M${x-s*.5} ${y} Q${x-s*.62} ${y-s*.95} ${x-s*.25} ${y-s*.9} L${x} ${y-s*.5} L${x+s*.25} ${y-s*.9} Q${x+s*.62} ${y-s*.95} ${x+s*.5} ${y} Q${x} ${y+s*.38} ${x-s*.5} ${y}Z" fill="${c}" stroke="${d}" stroke-width="1"/>
+  <path d="M${x} ${y-s*.5} L${x} ${y+s*.15}" stroke="${d}" stroke-width="1" opacity=".6"/>`;
+}
+function daisy(x,y,r,n=12){
+  let s='';for(let i=0;i<n;i++)s+=`<ellipse cx="${x}" cy="${y-r*.6}" rx="${r*.17}" ry="${r*.45}" fill="#fff" stroke="#e6dfe0" stroke-width=".8" transform="rotate(${i*360/n} ${x} ${y})"/>`;
+  return s+`<circle cx="${x}" cy="${y}" r="${r*.3}" fill="#f5cf5c"/><circle cx="${x}" cy="${y}" r="${r*.3}" fill="none" stroke="#e3b23c" stroke-dasharray="1.5 2"/>`;
+}
+function blossom(x,y,r,c='#fbc8d4',d='#e98aa3'){
+  let s='';for(let i=0;i<5;i++)s+=`<path d="M${x} ${y} C${x-r*.55} ${y-r*.5} ${x-r*.35} ${y-r*1.05} ${x-r*.08} ${y-r*.95} L${x} ${y-r*.82} L${x+r*.08} ${y-r*.95} C${x+r*.35} ${y-r*1.05} ${x+r*.55} ${y-r*.5} ${x} ${y}Z" fill="${c}" stroke="${d}" stroke-width=".7" transform="rotate(${i*72} ${x} ${y})"/>`;
+  for(let i=0;i<5;i++){const a=(i*72-90)*Math.PI/180;s+=`<circle cx="${x+Math.cos(a)*r*.3}" cy="${y+Math.sin(a)*r*.3}" r="${r*.07}" fill="${d}"/>`}
+  return s+`<circle cx="${x}" cy="${y}" r="${r*.12}" fill="#f2c25c"/>`;
+}
+function forgetMeNot(x,y,r,c='#9cc3ec'){
+  let s='';for(let i=0;i<5;i++){const a=(i*72-90)*Math.PI/180;s+=`<circle cx="${x+Math.cos(a)*r*.55}" cy="${y+Math.sin(a)*r*.55}" r="${r*.45}" fill="${c}"/>`}
+  return s+`<circle cx="${x}" cy="${y}" r="${r*.25}" fill="#fff6c8"/><circle cx="${x}" cy="${y}" r="${r*.1}" fill="#f0c04a"/>`;
+}
+function lavender(x,y,h,c='#b9a2dd'){
+  let s=stem(x,y,x+2,y-h,'#9ab48f');
+  for(let i=0;i<7;i++){const yy=y-h+i*h*.07;s+=`<ellipse cx="${x+2-(i%2?3:-3)}" cy="${yy}" rx="2.6" ry="4.2" fill="${c}" transform="rotate(${i%2?-25:25} ${x+2} ${yy})"/>`}
+  return s;
+}
+function babysBreath(x,y,n=6){let s='';for(let i=0;i<n;i++){const a=i/n*Math.PI*2;s+=`<circle cx="${x+Math.cos(a)*7}" cy="${y+Math.sin(a)*6}" r="2.2" fill="#fff" stroke="#eadfe2" stroke-width=".6"/>`}return s}
+
+/* Opening flower on the envelope */
+document.getElementById('envFlower').innerHTML=leaf(32,62,-150,30)+leaf(66,64,-30,30)+rose(50,50,26)+babysBreath(24,34,5)+babysBreath(78,36,5);
+
+/* Wreath over the top of the letter */
+document.getElementById('wreath').innerHTML=
+  `<path d="M20 110 Q210 10 400 110" stroke="#9cc093" stroke-width="2.2" fill="none"/>`+
+  leaf(48,92,-40)+leaf(80,72,-30)+leaf(120,56,-160)+leaf(160,44,-15)+leaf(262,44,195)+leaf(300,54,-20)+leaf(338,72,210)+leaf(370,92,220)+
+  lavender(60,104,46)+lavender(360,104,46)+
+  forgetMeNot(36,104,9)+tulip(100,74,26)+blossom(140,54,16)+daisy(176,42,17)+
+  rose(210,38,24)+
+  daisy(244,42,17)+blossom(280,54,16)+tulip(320,74,26,'#f7b7c6','#e38aa1')+forgetMeNot(384,104,9)+
+  babysBreath(190,64,6)+babysBreath(232,64,6)+forgetMeNot(122,82,6)+forgetMeNot(298,82,6);
+
+/* Corner bouquets */
+const cornerArt=
+  stem(20,150,52,72)+stem(20,150,88,96)+stem(20,150,30,60)+leaf(36,116,-70,26)+leaf(58,118,-25,26)+leaf(28,94,-100,22)+
+  lavender(10,150,80)+tulip(30,62,30)+rose(56,74,20,'#f4b2c1','#d36a86')+daisy(92,98,18)+blossom(104,128,13)+
+  forgetMeNot(76,128,8)+forgetMeNot(122,112,6)+babysBreath(70,48,6)+babysBreath(116,80,5);
+document.getElementById('cornerBL').innerHTML=cornerArt;
+document.getElementById('cornerBR').innerHTML=cornerArt;
+
+/* Side vines with tiny blooms */
+const vine=`<path d="M23 0 C5 50 41 100 23 150 C5 200 41 250 23 300 C5 350 41 380 23 400" stroke="#a7c79f" stroke-width="1.8" fill="none"/>`+
+  leaf(14,40,-120,16)+leaf(32,120,-30,16)+leaf(14,200,-120,16)+leaf(32,280,-30,16)+leaf(14,350,-120,16)+
+  forgetMeNot(23,75,6)+blossom(23,170,8)+forgetMeNot(23,250,6)+blossom(23,330,8);
+document.getElementById('sideL').innerHTML=vine;
+document.getElementById('sideR').innerHTML=vine;
+
+/* Flower dividers */
+const dividers=[
+  `<path d="M10 34 H150" stroke="#e4d4c4" stroke-width="1"/>${leaf(52,34,-160,20)}${leaf(108,34,-20,20)}${daisy(58,30,12)}${rose(80,28,15)}${daisy(102,30,12)}`,
+  `<path d="M10 34 H150" stroke="#e4d4c4" stroke-width="1"/>${leaf(50,34,-160,20)}${leaf(110,34,-20,20)}${blossom(56,30,12)}${tulip(80,38,26)}${blossom(104,30,12)}${forgetMeNot(36,34,5)}${forgetMeNot(124,34,5)}`
+];
+document.querySelectorAll('[data-div]').forEach(s=>s.innerHTML=dividers[+s.dataset.div]);
+
+/* Falling petals in soft colours */
+const pc=['#f7c3cf','#fbd8c6','#dccff2','#ffffff','#cfe2f6','#f9e1a8'];
+for(let k=0;k<18;k++){const p=document.createElement('div');p.className='petal';const z=8+Math.random()*9;
+  p.innerHTML=`<svg width="${z}" height="${z}" viewBox="0 0 10 10"><ellipse cx="5" cy="5" rx="3" ry="5" fill="${pc[k%pc.length]}" stroke="#eadede" stroke-width=".4" opacity=".9"/></svg>`;
+  p.style.left=Math.random()*100+'vw';p.style.animationDuration=(12+Math.random()*12)+'s';p.style.animationDelay=(-Math.random()*22)+'s';
+  document.body.appendChild(p)}
+
+/* ================= Opening ================= */
+document.getElementById('date').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+function openLetter(){
+  const env=document.getElementById('env');if(env.classList.contains('open'))return;
+  env.classList.add('open');
+  setTimeout(()=>{
+    document.getElementById('intro').classList.add('off');
+    const L=document.getElementById('letter');L.style.display='block';document.body.classList.add('reading');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>L.classList.add('show')));
+    const items=document.querySelectorAll('.fade');
+    if('IntersectionObserver' in window){
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2});
+      items.forEach(e=>io.observe(e));
+    }else items.forEach(e=>e.classList.add('in'));
+  },1900);
+}
+</script>
+</body>
+</html>
